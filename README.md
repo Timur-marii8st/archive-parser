@@ -17,6 +17,7 @@
 ## 🎯 О проекте
 
 Система автоматически обрабатывает фотографии архивных дел и создаёт структурированную опись в формате Word.
++ еще есть скрипт для обработки и создания описи ОДНОГО документа
 
 **Процесс работы:**
 1. 📸 Сканирование папок с фотографиями документов
@@ -157,6 +158,7 @@ image_size = 512  # вместо 768
 ## 🎯 About
 
 The system automatically processes photos of archive cases/files and creates a structured inventory in Microsoft Word format.
++ there is also a script for processing and creating an inventory of a single document
 
 **Workflow:**
 1. 📸 Scanning folders containing document photos
