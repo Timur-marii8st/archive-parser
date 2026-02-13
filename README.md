@@ -1,10 +1,22 @@
-# 📚 Archive Parser
+<div align="center">
+
+[![ru](https://img.shields.io/badge/lang-ru-blue.svg)](#-archive-parser-ru)
+[![en](https://img.shields.io/badge/lang-en-red.svg)](#-archive-parser-en)
+
+</div>
+
+---
+
+<a id="ru"></a>
+
+# 📚 Archive Parser (RU)
 
 > Автоматизированная система создания архивных описей на основе OCR и искусственного интеллекта
+> **UPDATE:** Добавил скрипт автоматизации создания описи одного документа
 
 ## 🎯 О проекте
 
-Система автоматически обрабатывает фотографии архивных дел и создаёт структурированную опись в формате Word. 
+Система автоматически обрабатывает фотографии архивных дел и создаёт структурированную опись в формате Word.
 
 **Процесс работы:**
 1. 📸 Сканирование папок с фотографиями документов
@@ -113,7 +125,7 @@ image_size = 512  # вместо 768
 
 ### Дубликаты в результатах
 
-Логи Kaggle дублируют каждую строку. Используйте `parse_kaggle_log_fixed()` который учитывает номера дел `[N/260]`.
+Логи Kaggle дублируют каждую строку. Используйте `parse_kaggle_log_fixed()`, который учитывает номера дел `[N/260]`.
 
 ### Пустые ячейки в Word
 
@@ -130,4 +142,144 @@ image_size = 512  # вместо 768
 
 <p align="center">
   Сделано с ❤️ для автоматизации архивного дела
+</p>
+
+---
+<br>
+
+<a id="en"></a>
+
+# 📚 Archive Parser (EN)
+
+> Automated system for creating archive inventories based on OCR and Artificial Intelligence
+> **UPDATE:** Added a script for automating single document inventory creation
+
+## 🎯 About
+
+The system automatically processes photos of archive cases/files and creates a structured inventory in Microsoft Word format.
+
+**Workflow:**
+1. 📸 Scanning folders containing document photos
+2. 🔍 OCR text recognition using DeepSeek-OCR-2
+3. 🤖 Data analysis and structuring using LLM
+4. 📄 Generation of a Word document with the inventory
+
+## ✨ Features
+
+- ✅ Recognition of both handwritten and printed text
+- ✅ Automatic document type detection
+- ✅ Metadata extraction (dates, case numbers, page counts)
+- ✅ Autosave progress (crash protection)
+- ✅ Ability to resume processing from where it left off
+- ✅ Data recovery from Kaggle logs
+- ✅ Inventory generation in GOST format
+
+## 📋 Requirements
+
+### Hardware Requirements (available on Colab/Kaggle)
+- **GPU**: NVIDIA with CUDA support (minimum 16GB VRAM)
+- **RAM**: 32GB+
+- **Storage**: 50GB+ free space
+
+### Software Requirements
+- Python 3.11+
+- CUDA 11.8+
+- PyTorch 2.6.0
+
+## 🚀 Installation
+
+### Upload the .ipynb notebook to Kaggle and run with x2 T4
+### OR: Install all listed dependencies from the file and run all cells locally
+
+## 📊 Output Format
+
+### JSON Record Structure
+
+```json
+{
+  "num": 1,
+  "index": "02-1193/2/2020",
+  "title": "Court case No. 02-1193/2/2020 on debt recovery claim (Contract, Act, Decision)",
+  "date": "2020",
+  "pages": "44",
+  "storage": "5 years",
+  "note": ""
+}
+```
+
+### Inventory Structure (Word)
+
+| No. | Case Index | Case Title | Case Date | Storage Period | Sheets | Note |
+|-----|------------|------------|-----------|----------------|--------|------|
+| 1 | 02-1193/2/2020 | Court case... | 2020 | 5 years | 44 | |
+
+## ⚙️ Configuration
+
+### Main Parameters (main.py)
+
+```python
+# API Settings
+API_KEY = "your-api-key"
+BASE_URL = "https://openrouter.ai/api/v1"
+
+# Models
+OCR_MODEL = "deepseek-ai/DeepSeek-OCR-2"
+LLM_MODEL = "xiaomi/mimo-v2-flash"
+
+# Paths
+BATCH_FOLDERS = ["/path/to/photos"]
+OUTPUT_FILE = "GOTOVAYA_OPIS.docx"
+PROGRESS_FILE = "progress.json"
+
+# OCR Parameters
+BASE_SIZE = 1024
+IMAGE_SIZE = 768
+CROP_MODE = True
+```
+
+### LLM Prompt Setup
+
+```python
+system_prompt = """
+You are an intelligent archivist...
+"""
+```
+
+## 🔧 Troubleshooting
+
+### "CUDA out of memory" Error
+
+```python
+# Add before processing each image
+torch.cuda.empty_cache()
+gc.collect()
+
+# Reduce image size
+base_size = 768  # instead of 1024
+image_size = 512  # instead of 768
+```
+
+### "Package not found at 'template.docx'" Error
+
+The script creates the Word document programmatically; a template is not needed. If this error occurs, use the JSON recovery method.
+
+### Duplicates in Results
+
+Kaggle logs often duplicate lines. Use `parse_kaggle_log_fixed()`, which accounts for case numbers like `[N/260]`.
+
+### Empty Cells in Word
+
+Ensure you are using the updated version of `create_opis_document()` which explicitly creates a `run` for each cell.
+
+## 📈 Performance
+
+| Metric | Value |
+|--------|-------|
+| OCR Speed | ~5-15 sec/image |
+| LLM Speed | ~1-3 sec/request |
+| Avg Time per Case | ~30-60 sec |
+| 260 Cases | ~8-9 hours |
+
+<p align="center">
+  Made with ❤️ for archival automation
 </p>
